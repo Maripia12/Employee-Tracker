@@ -76,3 +76,4 @@ values ("Megan", "Kelly", 6, null);
 insert into employee (first_name, last_name, role_id, manager_id)
 values ("Alex", "Mario", 7, 6);
 
+

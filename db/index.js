@@ -1,15 +1,56 @@
 const connection = require('./connect');
 
-class Data {
+class DB {
     constructor(connection){
-        return this.connection = connection
+        return this.connection = connection;
+      
+
     }
 
+    //View Departments / Roles / Employee 
+    
+
+    
+    viewDepartments() {
+        return this.connection.query('SELECT * FROM department' , (err, data) => {
+
+        
+
+
+        })
+        
+    }
+
+
+    viewRoles() {
+        return this.connection.query('SELECT * FROM role' , (err,data) => {
+
+        
+        })
+        
+        
+    }
+
+    viewEmployees() {
+        return this.connection.query('SELECT * FROM employee' , (err,data) => {
+
+           
+
+        })
+        
+        
+    }
+
+    // Add Department / Roles / Employees
+
+
+
+ 
     //find all employees, join eith roles and deparment. display roles, salaries, departments, and managers
 
-    findEmployees(){
-        return this.connection.query(
-          "SELECT employee.id, employee.first_name, employee.last_name, role.title AS role, department.name AS department, role.salary FROM employee LEFT JOIN role on employee.role_id = role.id LEFT Join department on role.department_id = department.id; "
+    findAllEmployees(){
+        return this.connection.promise().query(
+          "SELECT employee.id, employee.first_name, employee.last_name, role.title AS role, department.name AS department, role.salary, concat(manager.first_name, ' ' , manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT Join department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id; "
         );
     }
 
@@ -39,9 +80,9 @@ class Data {
     //find all departments, join with employees and roles, sum up the budget by department
 
     //create new department
-     createDepartment(a) {
-         return this.connection.query("INSERT INTO department SET ?", a)
-     }
+    //  createDepartment(a) {
+    //      return this.connection.query("INSERT INTO department SET ?", a)
+    //  }
 
     //delete department
 
@@ -53,4 +94,4 @@ class Data {
 
 }
 
-module.export = new Data(connection)
+module.exports = new DB(connection);
