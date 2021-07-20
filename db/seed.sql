@@ -53,6 +53,26 @@ values ("Lawyer", 125000, 4);
 <--- Employee Table --->
 
 insert into employee (first_name, last_name, role_id, manager_id)
-values
+values ("Katie", "Smith", 1, null);
 
+insert into employee (first_name, last_name, role_id, manager_id)
+values ("Josh", "Heart", 2, 1);
+
+insert into employee (first_name, last_name, role_id, manager_id)
+values ("Kevin", "Perez", 3, null);
+
+insert into employee (first_name, last_name, role_id, manager_id)
+values ("Pia", "Paulino", 2, 3);
+
+insert into employee (first_name, last_name, role_id, manager_id)
+values ("Abbie", "Hope", 4, 5);
+
+insert into employee (first_name, last_name, role_id, manager_id)
+values ("Michael", "Jones", 5, null);
+
+insert into employee (first_name, last_name, role_id, manager_id)
+values ("Megan", "Kelly", 6, null);
+
+insert into employee (first_name, last_name, role_id, manager_id)
+values ("Alex", "Mario", 7, 6);
 
