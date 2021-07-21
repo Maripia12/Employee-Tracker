@@ -1,8 +1,10 @@
-const inquirer = require('inquirer')
-const db = require('./db');
-require('console.table');
+const inquirer = require("inquirer");
+const db = require("./db");
+require("console.table");
 
-function direction(){
+
+function direction() {
+
 
     inquirer
       .prompt({
@@ -16,8 +18,8 @@ function direction(){
           "View Departments",
           "View Roles",
           "View Employees",
-          "Update Employees",
-          "Update roles",
+          "Update Employee",
+          "Update role",
         ],
       })
       .then((answer) => {
@@ -43,43 +45,54 @@ function direction(){
             break;
 
           case "View Employees":
-            viewEmployees();
-            break;
+              viewEmployees();
+              break;
+              
+              case "Update Employees":
+                  updateEmployees();
+                  break;
+                  
+                  case "Update Roles":
+                      updateRoles();
+                      break;
+                    }
+                    
+                    
+                    
+                })
+                
+                
+            }
 
-          case "Update Employees":
-            updateEmployees();
-            break;
+      
 
-          case "Update Roles":
-            updateRoles();
-            break;
-        }
+      const addDepartments = () => {
+          inquirer
+          .prompt([
+              {
+             
+                name: "department name",
+                type: 'input',
+                message:"What department would you like to add?"
+               }
+
+              ])
 
 
 
+
+
+            .then(answer => {
+                connection.query('INSERT INTO department (name)VALUES (?);',)
+                
         })
 
-      }
-
-    //   const addDepartments = () => {
-    //       inquirer
-    //       .prompt({
-             
-    //             name: "department name",
-    //             type: 'input',
-    //             message:"What department would you like to add?"
-                
-    //         })
-
-
-
-    //         .then((answer) => {
-    //             connection.query('INSERT INTO department (name)VALUES (?);',)
-    //     })
-
-    // }
+        }
 
         const addRoles = () => {
+            //add findAllDepartment()
+            //take the date and map
+
             inquirer.prompt([
 
                 {
@@ -102,7 +115,7 @@ function direction(){
 
             ])
 
-            //  .then((answer) => {
+            //  results.for each((answer) => {
             //      connection.query('INSERT INTO role (title,salary,department_id) VALUES (?,?,?);',
 
             //  
@@ -114,83 +127,115 @@ function direction(){
             .prompt([
 
               {
-                name: "first name",
+                name: "first_name",
                 type: "input",
                 message: "Enter employees first name:",
               },
 
               {
-                name: "last name",
+                name: "last_name",
                 type: "input",
                 message: "Enter employees last name:",
-              },
+              }
+             ]).then(answer => {
+                var fName = answer.first_name;
+                var lName = answer.last_name;
 
-              {
-                name: "role id",
-                type: "input",
-                message: "Enter employees role_id:",
-              },
+                db.findAllRoles().then(([rows])=>{
+                    var roles= rows;
+                    const rChoices = roles.map(({id, title})=>({
+                        name: title,
+                        value: id
+                    }))
 
-              {
-                name: "manager id",
-                type: "input",
-                message: "Enter employees manager_id:",
-              },
+                    inquirer.prompt({
+                      name: "role_id",
+                      type: "list",
+                          message: "What is the employees role",
+                          choices: rChoices
+                    }).then(res =>{
+                        var roleId = res.role_id
 
-            ])
+                        db.findAllEmployees().then(([rows])=>{
+                            var employees = rows;
+                            const mChoices = employees.map(({id, first_name, last_name})=>({
+                                name: `${first_name} ${last_name}`,
+                                value: id
+                            }));
 
-            // .then((answer) => {
-            //     connection.query('INSERT INTO employee ("fist_name , last_name , role_id , manager_id) VALUES (?,?,?,?) " 
+                            inquirer.prompt({
+                                name:"manager_id",
+                                type: "list",
+                                message: "who is this employee's manager",
+                                choices: mChoices
+                            }).then(res => {
+                                var newEmployee={
+                                    manager_id: res.manager_id,
+                                    role_id: roleId,
+                                    first_name: fName,
+                                    last_name: lName
+                                }
 
-            //     )
-            // }
+                                db.createEmployee(newEmployee)
+                            }).then(()=>{
+                                direction();
+                            })
+                        })
+                    })
+                })
+
+
+             })
+              
+
+
+
+            
              
         } 
-        
-        
-           function viewEmployees() {
-                db.findAllEmployees()
-                .then((data) => {
-                    console.table(data);
-                }).then(()=> direction());
+
+       
+
+            function viewDepartments() {
+              db.findAllEmployees()
+                .then(([data]) => {
+                  console.table(data);
+                })
+                .then(() => direction());
             }
-    
 
 
+            
+            function viewRoles() {
+              db.findAllEmployees()
+                .then(([data]) => {
+                  console.table(data);
+                })
+                .then(() => direction());
+            }
 
-    // function viewDepartment() {
-    //     console.log('Initiate view department function');
+ 
+
+            function viewEmployees() {
+                 db.findAllEmployees()
+                 .then(([data]) => {
+                     console.table(data);
+                 }).then(()=> direction());
+             }
+     
         
-    // }
-  
+           
+
+
+
+    direction();
+        
+
+
 
   
+  
 
 
 
-//     // addEmployee();
-//     createDepartment(a) {
-
-//     }
-// }
-
-
-//  function addEmployee(){
-//     const data =  prompt([
-//         {
-//             name: "fname",
-//             message:"what is the employees first name?"
-//         }, 
-//         // {
-//         //     name: "lName",
-//         //     message: "what is the employees last name?"
-//         // }
-//     ])
-//          db.createEmployee(data)
-    
-
-    
-
-// }
-
-direction();
+   
