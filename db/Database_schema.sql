@@ -4,7 +4,7 @@ Create Database employee_tracker_db;
 use employee_tracker_db;
 
 Create Table department (
-id int not null auto_increment,
+id int auto_increment,
 name varchar (30) unique not null,
 primary key (id)
 );
