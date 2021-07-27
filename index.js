@@ -2,8 +2,9 @@ const inquirer = require("inquirer");
 const chalk = require('chalk');
 
 const db = require("./db");
-const { connection } = require("./db");
-require("console.table");
+
+
+// const table = require("console.table");
 
 
 
